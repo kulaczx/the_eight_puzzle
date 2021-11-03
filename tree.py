@@ -78,15 +78,38 @@ class tree:
                 else:
                     i = 0
                     child_index = 0
-                    least_misplaced = 100
                     for children in current_node.leaves:
-                        temp_puzzle = children.get_data()
-                        misplaced = temp_puzzle.compare_state()
-                        if misplaced < least_misplaced:
-                            least_misplaced = misplaced
-                            child_index = i
-                        i += 1
-                    if current_node.leaves[child_index] not in visited_node:
-                        q.put((least_misplaced, current_node.leaves[child_index],
-                               path + [current_node.leaves[child_index]]))
+                        if current_node.leaves[child_index] not in visited_node:
+                            temp = children.get_data()
+                            misplaced = temp.compare_state()
+                            q.put((misplaced, current_node.leaves[child_index],
+                                   path + [current_node.leaves[child_index]]))
+
+    def manhattan_distance_heuristic(self):
+        q = queue.PriorityQueue()
+        visited_node = set()
+        temp_puzzle = self.root.get_data()
+        q.put((temp_puzzle.compare_state(), self.root, [self.root]))
+        timer = time.time()
+        time_lst = []
+        while not q.empty():
+            current_node_priority, current_node, path = q.get()
+            current_puzzle = current_node.get_data()
+            visited_node.add(current_node)
+            if current_node.depth <= 80:
+                self.get_next_level(current_node)
+                current_time = time.time() - timer
+                time_lst.append((current_node.depth, current_time))
+                if current_puzzle.compare_state() == 0:
+                    print("find goal")
+                    return path, time_lst
+                else:
+                    i = 0
+                    child_index = 0
+                    for children in current_node.leaves:
+                        if current_node.leaves[child_index] not in visited_node:
+                            temp = children.get_data()
+                            misplaced_distance = temp.distance_to_goal()
+                            q.put((misplaced_distance, current_node.leaves[child_index],
+                                   path + [current_node.leaves[child_index]]))
 
