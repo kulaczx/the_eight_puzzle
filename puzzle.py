@@ -55,7 +55,7 @@ class puzzle:
         resultBool = False
         for i in range(self.max_num):
             if self.state[i] == 0:
-                if abs(i - self.top_right)%3 !=0 and i > 0:
+                if abs(i - self.top_right) % 3 != 0 and i > 0:
                     blank = i
                     resultBool = True
                     break
@@ -123,3 +123,27 @@ class puzzle:
 
     def get_move_cost(self):
         return self.move_cost
+
+    def distance_to_goal(self):
+        total_distance = 0
+        goal_state_row = 0
+        current_state_row = 0
+        for i in range(self.max_num):
+            if self.state[i] != self.goal_state[i] and self.state[i] != 0:
+                for row in range(self.rowSize, 0, -1):
+                    if i < row * self.rowSize:  # find current tile's row number
+                        current_state_row = row
+                    if self.state[i] - 1 < row * self.rowSize:  # find goal tile's row number
+                        goal_state_row = row
+
+                    move_to_rows = abs(
+                        goal_state_row - current_state_row)  # get row difference between goal and current
+                    if current_state_row < goal_state_row:  # get index of current tile after doing row moves
+                        index_near_goal = i + move_to_rows * self.rowSize
+                    else:
+                        index_near_goal = i - move_to_rows * self.rowSize
+
+                    move_in_row = abs(self.state[i] - 1 - index_near_goal)
+                total_distance += move_in_row + move_to_rows
+
+        return total_distance
