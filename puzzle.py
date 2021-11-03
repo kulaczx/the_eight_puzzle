@@ -86,7 +86,7 @@ class puzzle:
     def compare_state(self):
         missCount = 0
         for i in range(self.max_num):
-            if self.state[i] != self.goal_state[i]:
+            if self.state[i] != self.goal_state[i] and self.state[i] != 0:
                 missCount += 1
         return missCount
 

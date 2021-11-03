@@ -2,9 +2,13 @@ from puzzle import puzzle
 class mynode:
     def __init__(self, new_data):
         self.data = new_data
-
         self.leaves = []
-        self.leaves_count = 0
+        self.cost = 1
+        self.depth = 0
+
+    def __lt__(self, other):
+        return True
+
         #self.previous = node(puzzle([0,0,0,0,0,0,0,0,0]))
 
 
@@ -13,7 +17,6 @@ class mynode:
 
     def insert_leaf(self, node):
         self.leaves.append(node)
-        self.leaves_count = len(self.leaves)
         #node.add_prev(self)
 
     #def add_prev(self, prev_node):
