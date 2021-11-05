@@ -78,12 +78,16 @@ class tree:
                 else:
                     i = 0
                     child_index = 0
+                    least = 1000
                     for children in current_node.leaves:
-                        if current_node.leaves[child_index] not in visited_node:
-                            temp = children.get_data()
-                            misplaced = temp.compare_state()
-                            q.put((misplaced, current_node.leaves[child_index],
-                                   path + [current_node.leaves[child_index]]))
+                        temp = children.get_data()
+                        misplaced = temp.compare_state()
+                        if misplaced < least:
+                            least = misplaced
+                            child_index = children
+                    if child_index not in visited_node:
+                        q.put((least, child_index,
+                               path + [child_index]))
 
     def manhattan_distance_heuristic(self):
         q = queue.PriorityQueue()
@@ -107,9 +111,12 @@ class tree:
                     i = 0
                     child_index = 0
                     for children in current_node.leaves:
-                        if current_node.leaves[child_index] not in visited_node:
-                            temp = children.get_data()
-                            misplaced_distance = temp.distance_to_goal()
-                            q.put((misplaced_distance, current_node.leaves[child_index],
-                                   path + [current_node.leaves[child_index]]))
+                        temp = children.get_data()
+                        mdh = temp.distance_to_goal()
+                        if mdh < least:
+                            least = mdh
+                            child_index = children
+                    if child_index not in visited_node:
+                        q.put((least, child_index,
+                               path + [child_index]))
 
