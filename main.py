@@ -18,7 +18,7 @@ MTH = []
 MDH = []
 
 #for case in cases:
-atree = tree(cases[2])
+atree = tree(cases[4])
 p, t, n = atree.uniform_cost_search()
 print("Uniform Cost searching")
 
@@ -28,7 +28,7 @@ for item in p:
 print("time: ", t, " total nodes: ", n)
 uniformSearch.append((t, n))
 
-btree = tree(cases[2])
+btree = tree(cases[4])
 p, t, n = btree.misplaced_tile_heuristic()
 print("Misplaced Tile Heuristic")
 for item in p:
@@ -37,7 +37,7 @@ for item in p:
 print("time: ", t, " total nodes: ", n)
 MTH.append((t, n))
 
-ctree = tree(cases[2])
+ctree = tree(cases[4])
 p, t, n = ctree.manhattan_distance_heuristic()
 print("Manhattan Distance Heuristic")
 for item in p:

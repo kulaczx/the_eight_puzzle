@@ -9,15 +9,8 @@ class mynode:
     def __lt__(self, other):
         return True
 
-        #self.previous = node(puzzle([0,0,0,0,0,0,0,0,0]))
-
-
     def get_data(self):
         return self.data
 
     def insert_leaf(self, node):
         self.leaves.append(node)
-        #node.add_prev(self)
-
-    #def add_prev(self, prev_node):
-        #self.previous = prev_node
