@@ -4,19 +4,35 @@ class puzzle:
         for item in slist:
             self.state.append(item)
         self.move = "NONE"
+        self.parent_move = "NONE"
         self.max_num = puzzle_number
         self.top_right = topRight
         self.rowSize = self.top_right + 1
         self.goal_state = []
         self.move_cost = 1
+        self.gh = 0
+        self.hh = 0
         for i in range(1, self.max_num):
             self.goal_state.append(i)
         self.goal_state.append(0)
+
+    def __lt__(self, other):
+        return self.ok_move(self.parent_move)
+
+
+    def ok_move(self, step):
+        if (step == "UP" and self.move == "DOWN") or (step == "DOWN" and self.move == "UP") or (step == "RIGHT" and self.move == "LEFT") or (step == "LEFT" and self.move == "RIGHT"):
+            return False
+        else:
+            return True
 
     def cpy_puzzle(self):
         temp = []
         new_pzle = puzzle(self.state)
         return new_pzle
+
+    def set_parent_move(self, pMove):
+        self.parent_move = pMove
 
     def move_blank_up(self):  # index 0, 1, 2 can't do up
         resultBool = False
@@ -83,16 +99,24 @@ class puzzle:
         self.move_cost = 1
         return True
 
+    def compare_prev(self, prev):
+        for i in range(self.max_num):
+            if self.state[i] != prev.state[i]:
+                return False
+        return True
+
     def compare_state(self):
         missCount = 0
         for i in range(self.max_num):
             if self.state[i] != self.goal_state[i] and self.state[i] != 0:
                 missCount += 1
+        self.gh = missCount
         return missCount
 
     def show_puzzle(self):
         row_count = 1
         row = ''
+        print()
         print("current state")
         for i in range(len(self.state)):
             if row_count == self.rowSize:
@@ -104,19 +128,8 @@ class puzzle:
                 row += str(self.state[i])
                 row_count += 1
         print(row)
-        row = ''
-        row_count = 1
-        print("goal state")
-        for i in range(len(self.goal_state)):
-            if row_count == self.rowSize:
-                row += str(self.goal_state[i])
-                print(row)
-                row_count = 1
-                row = ''
-            else:
-                row += str(self.goal_state[i])
-                row_count += 1
-        print(row)
+        print("g(n) = ", self.gh, " h(n) = ", self.hh)
+
 
     def get_move(self):
         return self.move
@@ -145,5 +158,5 @@ class puzzle:
 
                     move_in_row = abs(self.state[i] - 1 - index_near_goal)
                 total_distance += move_in_row + move_to_rows
-
+        self.hh = total_distance
         return total_distance
